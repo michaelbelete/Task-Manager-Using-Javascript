@@ -33,6 +33,10 @@ function createMessage(msg, color){
     message.appendChild(del)
 
 }
+
+function deleteMessage() {
+    message.style.display = "none"
+}
 // Add New  Task Function definition 
 function addNewTask(e) {
 
@@ -62,6 +66,7 @@ function addNewTask(e) {
     taskList.appendChild(li);
 
     taskInput.value = "" //clearing the input
+    deleteMessage()
 
 }
 
