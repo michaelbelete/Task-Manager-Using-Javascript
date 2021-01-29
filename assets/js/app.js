@@ -89,7 +89,7 @@ function filterTasks(e) {
       5. On each element check if the textContent of the li contains the text from User Input  [can use indexOf]
       6 . If it contains , change the display content of the element as block , else none      
       */ 
-     let searchedFor = filter.value
+     let searchedFor = filter.value //mke it lower case
 
      let AllTasks = document.querySelectorAll('.collection-item')
  
@@ -97,7 +97,11 @@ function filterTasks(e) {
          taskTextContent = task.textContent
          let searchResult = taskTextContent.indexOf(searchedFor)
          
-         
+        if (searchResult == -1){
+             task.style.display = "none"
+         }else{
+             task.style.display = "block"
+         }
      })
 
 
