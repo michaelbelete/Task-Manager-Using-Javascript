@@ -95,7 +95,7 @@ function filterTasks(e) {
  
      AllTasks.forEach(function (task) {
          taskTextContent = task.textContent
-         let searchResult = taskTextContent.indexOf(searchedFor)
+         let searchResult = taskTextContent.indexOf(searchedFor.toLowerCase())
          
         if (searchResult == -1){
              task.style.display = "none"
