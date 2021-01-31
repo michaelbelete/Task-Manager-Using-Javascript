@@ -51,28 +51,10 @@ function addNewTask(e) {
         return;
     }
 
-    // Create an li element when the user adds a task
-    const li = document.createElement("li");
-    // Adding a class
-    li.className = "collection-item";
-    // Create text node and append it
-    const p = document.createElement("span")
-    p.innerHTML = taskInput.value
-    li.appendChild(p);
-    // Create new element for the link
-    const link = document.createElement("a");
-    // Add class and the x marker for a
-    link.className = "delete-item secondary-content";
-    link.innerHTML = '<i class="fa fa-remove"></i>';
-    // Append link to li
-    li.appendChild(link);
-    // Append to UL
-    taskList.appendChild(li);
     const nowDate = new Date();
-    const addDate = document.createElement("em")
-    addDate.className = "align-right"
-    addDate.innerHTML = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
-    li.appendChild(addDate)
+    const nowDateString = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
+
+    createTaskElement(taskInput.value, nowDateString)
     taskInput.value = ""; //clearing the input
     deleteMessage();
 }
@@ -148,12 +130,37 @@ function sortAsc() {
     const sortedContent = allContents.sort((a,b) => (a.date > b.date) ? 1:-1)
 
     console.log(sortedContent)
-    
-    // const allTasksArray = Array.prototype.slice.call(allTasks);
-    // // console.log()
-    // console.log(allTasksArray.textContent)
+
+    document.querySelector('.collection').innerHTML = ''
+    sortedContent.forEach(function(task){
+        createTaskElement(task.task, task.date)
+    })
 }
 
 function sortDsc() {
     console.log("dsc")
+}
+
+function createTaskElement(task, date){
+     // Create an li element when the user adds a task
+     const li = document.createElement("li");
+     // Adding a class
+     li.className = "collection-item";
+     // Create text node and append it
+     const p = document.createElement("span")
+     p.innerHTML = task
+     li.appendChild(p);
+     // Create new element for the link
+     const link = document.createElement("a");
+     // Add class and the x marker for a
+     link.className = "delete-item secondary-content";
+     link.innerHTML = '<i class="fa fa-remove"></i>';
+     // Append link to li
+     li.appendChild(link);
+     // Append to UL
+     taskList.appendChild(li);
+     const addDate = document.createElement("em")
+     addDate.className = "align-right"
+     addDate.innerHTML = date
+     li.appendChild(addDate)
 }
