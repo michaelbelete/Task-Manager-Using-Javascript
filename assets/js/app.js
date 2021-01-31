@@ -129,7 +129,6 @@ function sortAsc() {
 
     const sortedContent = allContents.sort((a,b) => (a.date > b.date) ? 1:-1)
 
-    console.log(sortedContent)
 
     document.querySelector('.collection').innerHTML = ''
     sortedContent.forEach(function(task){
@@ -138,7 +137,24 @@ function sortAsc() {
 }
 
 function sortDsc() {
-    console.log("dsc")
+    const allTasks = document.querySelectorAll('.collection-item')
+    const allContents = []
+    allTasks.forEach(function (task) {
+        let content = {
+            task: task.childNodes[0].textContent,
+            date: task.childNodes[2].textContent
+        }
+
+        allContents.push(content)
+    })
+
+    const sortedContent = allContents.reverse((a,b) => (a.date > b.date) ? 1:-1)
+
+
+    document.querySelector('.collection').innerHTML = ''
+    sortedContent.forEach(function(task){
+        createTaskElement(task.task, task.date)
+    })
 }
 
 function createTaskElement(task, date){
