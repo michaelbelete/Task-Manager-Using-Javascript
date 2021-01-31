@@ -142,9 +142,13 @@ function sortAsc() {
             date: task.childNodes[2].textContent
         }
 
-        console.log(content)
         allContents.push(content)
     })
+
+    const sortedContent = allContents.sort((a,b) => (a.date > b.date) ? 1:-1)
+
+    console.log(sortedContent)
+    
     // const allTasksArray = Array.prototype.slice.call(allTasks);
     // // console.log()
     // console.log(allTasksArray.textContent)
