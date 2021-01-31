@@ -7,6 +7,8 @@ const clearBtn = document.querySelector(".clear-tasks"); //the all task clear bu
 const reloadIcon = document.querySelector(".fa"); //the reload button at the top navigation
 const message = document.querySelector("#message");
 
+const asc = document.querySelector('#asc')
+const dsc = document.querySelector('#dsc')
 // Add Event Listener  [Form , clearBtn and filter search input ]
 
 // form submit
@@ -19,6 +21,9 @@ filter.addEventListener("keyup", filterTasks);
 taskList.addEventListener("click", removeTask);
 // Event Listener for reload
 reloadIcon.addEventListener("click", reloadPage);
+
+asc.addEventListener("click", sortAsc)
+dsc.addEventListener("click", sortDsc)
 
 function createMessage(msg, color) {
     message.innerText = msg;
@@ -51,7 +56,9 @@ function addNewTask(e) {
     // Adding a class
     li.className = "collection-item";
     // Create text node and append it
-    li.appendChild(document.createTextNode(taskInput.value));
+    const p = document.createElement("span")
+    p.innerHTML = taskInput.value
+    li.appendChild(p);
     // Create new element for the link
     const link = document.createElement("a");
     // Add class and the x marker for a
@@ -92,21 +99,21 @@ function filterTasks(e) {
       4. Iterate over the collection item Node List using forEach
       5. On each element check if the textContent of the li contains the text from User Input  [can use indexOf]
       6 . If it contains , change the display content of the element as block , else none      
-      */ 
-     let searchedFor = filter.value //mke it lower case
+      */
+    let searchedFor = filter.value //mke it lower case
 
-     let AllTasks = document.querySelectorAll('.collection-item')
- 
-     AllTasks.forEach(function (task) {
-         taskTextContent = task.textContent
-         let searchResult = taskTextContent.indexOf(searchedFor.toLowerCase())
-         
-        if (searchResult == -1){
-             task.style.display = "none"
-         }else{
-             task.style.display = "block"
-         }
-     })
+    let AllTasks = document.querySelectorAll('.collection-item')
+
+    AllTasks.forEach(function (task) {
+        taskTextContent = task.textContent
+        let searchResult = taskTextContent.indexOf(searchedFor.toLowerCase())
+
+        if (searchResult == -1) {
+            task.style.display = "none"
+        } else {
+            task.style.display = "block"
+        }
+    })
 
 
 }
@@ -124,4 +131,25 @@ function removeTask(e) {
 function reloadPage() {
     //using the reload fun on location object
     location.reload();
+}
+
+function sortAsc() {
+    const allTasks = document.querySelectorAll('.collection-item')
+    const allContents = []
+    allTasks.forEach(function (task) {
+        let content = {
+            task: task.childNodes[0].textContent,
+            date: task.childNodes[2].textContent
+        }
+
+        console.log(content)
+        allContents.push(content)
+    })
+    // const allTasksArray = Array.prototype.slice.call(allTasks);
+    // // console.log()
+    // console.log(allTasksArray.textContent)
+}
+
+function sortDsc() {
+    console.log("dsc")
 }
