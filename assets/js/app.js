@@ -61,7 +61,11 @@ function addNewTask(e) {
     li.appendChild(link);
     // Append to UL
     taskList.appendChild(li);
-
+    const nowDate = new Date();
+    const addDate = document.createElement("em")
+    addDate.className = "align-right"
+    addDate.innerHTML = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
+    li.appendChild(addDate)
     taskInput.value = ""; //clearing the input
     deleteMessage();
 }
