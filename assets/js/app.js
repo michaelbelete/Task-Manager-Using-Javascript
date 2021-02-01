@@ -10,23 +10,74 @@ const message = document.querySelector("#message");
 const asc = document.querySelector('#asc')
 const dsc = document.querySelector('#dsc')
 
+
+
 let DB;
 
 document.addEventListener('DOMContentLoaded', () => {
     let TasksDB = indexedDB.open('task-manager', 1); //create if not exist else open it
 
-    TasksDB.onsuccess = function() {
+    TasksDB.onsuccess = function () {
         console.log('Database Ready')
 
-        const DB = TasksDB.result;
+        DB = TasksDB.result;
 
-        console.log(DB)
     }
 
-    
-    TasksDB.onerror = function(e) {
-        alert("error occured check your console")
+    TasksDB.onupgradeneeded = function (e) {
+        let db = e.target.result;
+        let objectStore = db.createObjectStore('tasks', {
+            keyPath: 'id',
+            autoIncrement: true
+        })
+
+        objectStore.createIndex('taskname', 'taskname', {
+            unique: false
+        })
+        objectStore.createIndex('date', 'date', {
+            unique: false
+        })
+
+    }
+    TasksDB.onerror = function (e) {
+        alert("error occurred check your console")
         console.log("error occured creating the database")
         console.log("Error: " + e)
     }
 });
+
+form.addEventListener('submit', addNewTask)
+
+function addNewTask(e) {
+    e.preventDefault();
+    const nowDate = new Date();
+    const nowDateString = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
+
+    let newTask = { taskname: taskInput.value, date: nowDateString }
+
+    let transaction = DB.transaction(['tasks'], 'readwrite')
+    let objectStore = transaction.objectStore('tasks')
+
+    let request = objectStore.add(newTask)
+
+    request.onsuccess = function() {
+        createMessage("task created successfully", "green")
+        taskInput.value = ""
+    }
+
+    request.onerror = function(e) {
+        createMessage('error occured: ' + e, "red")
+    }
+}
+
+function createMessage(msg, color) {
+    message.innerText = msg;
+    message.className = `card-panel white-text ${color}`;
+    message.style.display = "block";
+
+    const del = document.createElement("a");
+    del.classList = "delete-item secondary-content";
+    del.innerHTML = '<i class="fa fa-remove"></i>';
+
+    message.appendChild(del);
+}
