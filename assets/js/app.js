@@ -53,22 +53,54 @@ function addNewTask(e) {
     const nowDate = new Date();
     const nowDateString = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
 
-    let newTask = { taskname: taskInput.value, date: nowDateString }
+    let newTask = {
+        taskname: taskInput.value,
+        date: nowDateString
+    }
 
     let transaction = DB.transaction(['tasks'], 'readwrite')
     let objectStore = transaction.objectStore('tasks')
 
     let request = objectStore.add(newTask)
 
-    request.onsuccess = function() {
+    request.onsuccess = function () {
         createMessage("task created successfully", "green")
+        form.reset()
         taskInput.value = ""
     }
 
-    request.onerror = function(e) {
+    transaction.oncomplete = () => {
+        console.log('New appointment added');
+        displayTaskList();
+    }
+
+    transaction.onerror = function (e) {
         createMessage('error occured: ' + e, "red")
     }
 }
+
+
+function displayTaskList() {
+    // clear the previous task list
+    while (taskList.firstChild) {
+        taskList.removeChild(taskList.firstChild);
+    }
+
+    // create the object store
+    let objectStore = DB.transaction('tasks').objectStore('tasks');
+
+    objectStore.openCursor().onsuccess = function (e) {
+        // assign the current cursor
+        let cursor = e.target.result;
+
+        if (cursor) {
+            createTaskElement(cursor.value.id, cursor.value.taskname, cursor.value.date)
+            cursor.continue();
+        }
+    }
+}
+
+
 
 function createMessage(msg, color) {
     message.innerText = msg;
@@ -80,4 +112,29 @@ function createMessage(msg, color) {
     del.innerHTML = '<i class="fa fa-remove"></i>';
 
     message.appendChild(del);
+}
+
+function createTaskElement(id, task, date) {
+    // Create an li element when the user adds a task
+    const li = document.createElement("li");
+    // Adding a class
+    li.className = "collection-item";
+    li.setAttribute('data-task-id', id);
+    // Create text node and append it
+    const p = document.createElement("span")
+    p.innerHTML = task
+    li.appendChild(p);
+    // Create new element for the link
+    const link = document.createElement("a");
+    // Add class and the x marker for a
+    link.className = "delete-item secondary-content";
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    // Append link to li
+    li.appendChild(link);
+    // Append to UL
+    taskList.appendChild(li);
+    const addDate = document.createElement("em")
+    addDate.className = "align-right"
+    addDate.innerHTML = date
+    li.appendChild(addDate)
 }
