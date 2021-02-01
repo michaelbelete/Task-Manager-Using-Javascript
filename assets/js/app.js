@@ -22,6 +22,14 @@ taskList.addEventListener("click", removeTask);
 // Event Listener for reload
 reloadIcon.addEventListener("click", reloadPage);
 
+$(document).ready(function(){
+   $("#dropdownbtn").click(function(){
+       $("#dropdown").slideToggle()
+   })
+})
+
+
+
 asc.addEventListener("click", sortAsc)
 dsc.addEventListener("click", sortDsc)
 
@@ -55,6 +63,7 @@ function addNewTask(e) {
     const nowDateString = nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds() + ":" + nowDate.getMilliseconds()
 
     createTaskElement(taskInput.value, nowDateString)
+    sortAsc()
     taskInput.value = ""; //clearing the input
     deleteMessage();
 }
@@ -127,11 +136,11 @@ function sortAsc() {
         allContents.push(content)
     })
 
-    const sortedContent = allContents.sort((a,b) => (a.date > b.date) ? 1:-1)
+    const sortedContent = allContents.sort((a, b) => (a.date > b.date) ? 1 : -1)
 
 
     document.querySelector('.collection').innerHTML = ''
-    sortedContent.forEach(function(task){
+    sortedContent.forEach(function (task) {
         createTaskElement(task.task, task.date)
     })
 }
@@ -148,35 +157,35 @@ function sortDsc() {
         allContents.push(content)
     })
 
-    const sortedContent = allContents.reverse((a,b) => (a.date > b.date) ? 1:-1)
+    const sortedContent = allContents.reverse((a, b) => (a.date > b.date) ? 1 : -1)
 
 
     document.querySelector('.collection').innerHTML = ''
-    sortedContent.forEach(function(task){
+    sortedContent.forEach(function (task) {
         createTaskElement(task.task, task.date)
     })
 }
 
-function createTaskElement(task, date){
-     // Create an li element when the user adds a task
-     const li = document.createElement("li");
-     // Adding a class
-     li.className = "collection-item";
-     // Create text node and append it
-     const p = document.createElement("span")
-     p.innerHTML = task
-     li.appendChild(p);
-     // Create new element for the link
-     const link = document.createElement("a");
-     // Add class and the x marker for a
-     link.className = "delete-item secondary-content";
-     link.innerHTML = '<i class="fa fa-remove"></i>';
-     // Append link to li
-     li.appendChild(link);
-     // Append to UL
-     taskList.appendChild(li);
-     const addDate = document.createElement("em")
-     addDate.className = "align-right"
-     addDate.innerHTML = date
-     li.appendChild(addDate)
+function createTaskElement(task, date) {
+    // Create an li element when the user adds a task
+    const li = document.createElement("li");
+    // Adding a class
+    li.className = "collection-item";
+    // Create text node and append it
+    const p = document.createElement("span")
+    p.innerHTML = task
+    li.appendChild(p);
+    // Create new element for the link
+    const link = document.createElement("a");
+    // Add class and the x marker for a
+    link.className = "delete-item secondary-content";
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    // Append link to li
+    li.appendChild(link);
+    // Append to UL
+    taskList.appendChild(li);
+    const addDate = document.createElement("em")
+    addDate.className = "align-right"
+    addDate.innerHTML = date
+    li.appendChild(addDate)
 }
