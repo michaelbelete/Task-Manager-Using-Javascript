@@ -13,5 +13,20 @@ const dsc = document.querySelector('#dsc')
 let DB;
 
 document.addEventListener('DOMContentLoaded', () => {
+    let TasksDB = indexedDB.open('task-manager', 1); //create if not exist else open it
+
+    TasksDB.onsuccess = function() {
+        console.log('Database Ready')
+
+        const DB = TasksDB.result;
+
+        console.log(DB)
+    }
+
     
+    TasksDB.onerror = function(e) {
+        alert("error occured check your console")
+        console.log("error occured creating the database")
+        console.log("Error: " + e)
+    }
 });
